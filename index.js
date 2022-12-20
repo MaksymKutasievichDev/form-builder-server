@@ -130,7 +130,6 @@ app.get("/get_user_data", authenticateToken, (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log("login");
   const username = req.body.username;
   const password = req.body.password;
   const user = { name: username, password: password };
