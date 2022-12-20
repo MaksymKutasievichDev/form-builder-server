@@ -130,25 +130,33 @@ app.get("/get_user_data", authenticateToken, (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  console.log("login");
   const username = req.body.username;
   const password = req.body.password;
   const user = { name: username, password: password };
-  findUserDataMongoDb(user)
-    .catch(console.dir)
-    .then((dbReq) => {
-      if (dbReq) {
-        if (dbReq.password == user.password) {
-          const accessToken = generateAccessToken(user);
-          const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-          refreshTokens.push(refreshToken);
-          res.json({ accessToken: accessToken, refreshToken: refreshToken });
+  try {
+    findUserDataMongoDb(user)
+      .catch(console.dir)
+      .then((dbReq) => {
+        if (dbReq) {
+          if (dbReq.password == user.password) {
+            const accessToken = generateAccessToken(user);
+            const refreshToken = jwt.sign(
+              user,
+              process.env.REFRESH_TOKEN_SECRET
+            );
+            refreshTokens.push(refreshToken);
+            res.json({ accessToken: accessToken, refreshToken: refreshToken });
+          } else {
+            res.status(500).send("Wrong password");
+          }
         } else {
-          res.status(500).send("Wrong password");
+          res.status(500).send("The user does not exist.");
         }
-      } else {
-        res.status(500).send("The user does not exist.");
-      }
-    });
+      });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.post("/register", (req, res) => {
