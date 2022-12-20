@@ -137,7 +137,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   const user = { name: username, password: password };
   res.json({ accessToken: "All good" });
-  /*findUserDataMongoDb(user)
+  findUserDataMongoDb(user)
     .catch(console.dir)
     .then((dbReq) => {
       if (dbReq) {
@@ -152,7 +152,7 @@ app.post("/login", (req, res) => {
       } else {
         res.status(500).send("The user does not exist.");
       }
-    });*/
+    });
 });
 
 app.post("/register", (req, res) => {
