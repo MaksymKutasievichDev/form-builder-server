@@ -1,6 +1,15 @@
-const { MongoClient } = require("mongodb");
+require("dotenv").config();
 
-//MOONGO DB TEST
+const express = require("express");
+const app = express();
+
+const jwt = require("jsonwebtoken");
+
+app.use(express.json());
+
+let refreshTokens = [];
+
+const MongoClient = require("mongodb").MongoClient;
 const url =
   "mongodb+srv://Mandarin753951a:Mandarin753951@formbuilder.84mwcbv.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(url);
@@ -56,18 +65,6 @@ async function updateUserDataMongoDb(user, newData) {
     return result;
   } catch (error) {}
 }
-////
-
-require("dotenv").config();
-
-const express = require("express");
-const app = express();
-
-const jwt = require("jsonwebtoken");
-
-app.use(express.json());
-
-let refreshTokens = [];
 
 app.post("/token", (req, res) => {
   const refreshToken = req.body.token;
