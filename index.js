@@ -83,7 +83,7 @@ app.post("/token", (req, res) => {
 // Add headers
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+  //res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
 
   // Request methods you wish to allow
   res.setHeader(
@@ -199,6 +199,8 @@ function authenticateToken(req, res, next) {
   });
 }
 
-app.listen(4000);
+app.listen(4000, () => {
+  console.log("Running on port 4000.");
+});
 
 module.exports = app;
