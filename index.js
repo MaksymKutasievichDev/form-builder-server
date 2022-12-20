@@ -70,11 +70,15 @@ app.post("/token", (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken == null) return res.sendStatus(401);
   if (!refreshTokens.includes(refreshToken)) return res.statusCode(401);
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({ name: user.name });
-    res.json({ accessToken: accessToken });
-  });
+  jwt.verify(
+    refreshToken,
+    "0b497d30f4ed2c2a9de7eea9143c1de604a4ea1a68f2f967d913acd43b17c94812381bb38fd533066103658c461435e4a33955774dbbff46275526a34231f3c0",
+    (err, user) => {
+      if (err) return res.sendStatus(403);
+      const accessToken = generateAccessToken({ name: user.name });
+      res.json({ accessToken: accessToken });
+    }
+  );
 });
 
 // Add headers
@@ -142,7 +146,7 @@ app.post("/login", (req, res) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = jwt.sign(
               user,
-              process.env.REFRESH_TOKEN_SECRET
+              "0b497d30f4ed2c2a9de7eea9143c1de604a4ea1a68f2f967d913acd43b17c94812381bb38fd533066103658c461435e4a33955774dbbff46275526a34231f3c0"
             );
             refreshTokens.push(refreshToken);
             res.json({ accessToken: accessToken, refreshToken: refreshToken });
@@ -180,7 +184,10 @@ app.post("/register", (req, res) => {
       } else {
         registerUserMongoDb(newUserData).catch(console.dir);
         const accessToken = generateAccessToken(user);
-        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+        const refreshToken = jwt.sign(
+          user,
+          "0b497d30f4ed2c2a9de7eea9143c1de604a4ea1a68f2f967d913acd43b17c94812381bb38fd533066103658c461435e4a33955774dbbff46275526a34231f3c0"
+        );
         refreshTokens.push(refreshToken);
         res.json({ accessToken: accessToken, refreshToken: refreshToken });
       }
@@ -188,18 +195,25 @@ app.post("/register", (req, res) => {
 });
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  return jwt.sign(
+    user,
+    "7dfd7ca6fdd5bb52dd1d9554c53afb32baee10c126f2d0899bca905e214cc3c8c9d2c75f617586b15c2719e8d8b7a3f423152c9bff223ad27aea1fc11a626d63"
+  );
 }
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
+  jwt.verify(
+    token,
+    "7dfd7ca6fdd5bb52dd1d9554c53afb32baee10c126f2d0899bca905e214cc3c8c9d2c75f617586b15c2719e8d8b7a3f423152c9bff223ad27aea1fc11a626d63",
+    (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+    }
+  );
 }
 
 app.listen(4000, () => {
