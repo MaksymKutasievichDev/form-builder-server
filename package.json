@@ -8,9 +8,9 @@
   },
   "scripts": {
     "devStart": "nodemon server.js",
-    "devStartAuth": "nodemon authServer.js",
+    "devStartAuth": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node authServer.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
